@@ -15,14 +15,14 @@
         * @jsx React.DOM
         */
         var ShoppingBox = React.createClass({
+            getInitialState: function() {
+                return {data: []};
+            },
             handleProductSubmit: function(product) {
                 var products = this.state.data;
                 products.push(product);
                 this.setState({data: products});
                 // TODO: salvar no server
-            },
-            getInitialState: function() {
-                return {data: []};
             },
             render: function () {
                 return (
@@ -36,6 +36,17 @@
         });
 
         var ShoppingTable = React.createClass({
+            hundleExclude: function () {
+              var campos = document.querySelectorAll('input[type=checkbox]');
+              campos = [].slice.apply(campos);
+              for (i = campos.length - 1; i >= 0; i--) {
+                  if (campos[i].checked) {
+                    this.props.data.splice(campos.indexOf(campos[i]), 1)
+                    this.setState({data: this.props.data});
+                  };
+              };
+            },
+
             render: function () {
                 var productNodes = this.props.data.map(function (product) {
                     return <Product ammount={product.ammount} checked={product.checked}>{product.name}</Product>;
@@ -51,6 +62,9 @@
                         </thead>
                         <tbody>
                             {productNodes}
+                            <button onClick={this.hundleExclude} class="btn btn-danger">
+                              excluir
+                            </button>
                         </tbody>
                     </table>
                 );
