@@ -36,7 +36,23 @@
         });
 
         var ShoppingTable = React.createClass({
-            hundleExclude: function () {
+          handleEdit: function () {
+            var campos = document.querySelectorAll('input[type=checkbox]');
+            campos = [].slice.apply(campos);
+            var index = campos.findIndex( item => item.checked == true);
+            var names = document.getElementsByClassName('product');
+            names = [].slice.apply(names);
+            var quantities = document.getElementsByClassName('ammount');
+            quantities = [].slice.apply(quantities);
+            var name = names[index].textContent;
+            var ammount = quantities[index].textContent;
+
+            this.props.data.splice(campos.indexOf(campos[index]), 1);
+            this.setState({data: this.props.data});
+            document.getElementById('input-name').value = name;
+            document.getElementById('input-ammount').value = ammount;
+          },
+            handleDelete: function () {
               var campos = document.querySelectorAll('input[type=checkbox]');
               campos = [].slice.apply(campos);
               for (i = campos.length - 1; i >= 0; i--) {
@@ -62,9 +78,8 @@
                         </thead>
                         <tbody>
                             {productNodes}
-                            <button onClick={this.hundleExclude} class="btn btn-danger">
-                              excluir
-                            </button>
+                            <button onClick={this.handleEdit} class="btn btn-warning">Editar</button>
+                            <button onClick={this.handleDelete} class="btn btn-danger">Excluir</button>
                         </tbody>
                     </table>
                 );
@@ -83,8 +98,8 @@
                 return (
                     <tr>
                         <td><input type="checkbox" checked={checked} onClick={this.toggle} /></td>
-                        <td>{this.props.children}</td>
-                        <td>{this.props.ammount}</td>
+                        <td class="product">{this.props.children}</td>
+                        <td class="ammount">{this.props.ammount}</td>
                     </tr>
                 );
             }
@@ -107,10 +122,10 @@
                 return (
                     <form class="form-inline" role="form" onSubmit={this.handleSubmit}>
                         <div class="form-group">
-                            <input type="text" placeholder="Produto" ref="name" class="form-control" />
+                            <input id="input-name" type="text" placeholder="Produto" ref="name" class="form-control" />
                         </div>
                         <div class="form-group">
-                            <input type="number" placeholder="Quantidade" ref="ammount" class="form-control" />
+                            <input id="input-ammount" type="number" placeholder="Quantidade" ref="ammount" class="form-control" />
                         </div>
                         <button type="submit" class="btn btn-primary">adicionar ítem</button>
                     </form>
